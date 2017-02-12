@@ -19,6 +19,7 @@
 !gradle-wrapper.jar
 
 # Binaries
+*.target
 build
 target
 out
