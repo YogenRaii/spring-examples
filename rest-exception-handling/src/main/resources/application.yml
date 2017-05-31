@@ -1,0 +1,8 @@
+errors:
+  description:
+    EXC400: INVALID INPUT
+    EXC404: NO CONTENT FOUND
+    
+    
+server:
+  port: 5000
