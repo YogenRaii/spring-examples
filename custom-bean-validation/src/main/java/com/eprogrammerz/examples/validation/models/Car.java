@@ -28,8 +28,8 @@ public class Car {
 
     @NotNull
     @Size(min = 2, max = 14)
-    @CheckCase(CaseMode.UPPER)
-    private CaseMode licensePlate;
+    @CheckCase(enumClass = CaseMode.class)
+    private String licensePlate;
 
     @Min(2)
     private int seatCount;

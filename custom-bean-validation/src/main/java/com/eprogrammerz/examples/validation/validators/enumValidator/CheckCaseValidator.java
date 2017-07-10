@@ -14,11 +14,11 @@ import com.eprogrammerz.examples.validation.models.types.CaseMode;
  */
 public class CheckCaseValidator implements ConstraintValidator<CheckCase, String> {
 
-    private CaseMode caseMode;
+    private CheckCase caseMode;
 
     @Override
     public void initialize(CheckCase constraintAnnotation) {
-        this.caseMode = constraintAnnotation.value();
+        this.caseMode = constraintAnnotation;
     }
 
     @Override
@@ -26,24 +26,23 @@ public class CheckCaseValidator implements ConstraintValidator<CheckCase, String
         if ( object == null ) {
             return true;
         }
+        
+        boolean result = false;
+        
+        Object[] enumValues = this.caseMode.enumClass().getEnumConstants();
 
-        boolean isValid;
-        if ( caseMode == CaseMode.UPPER ) {
-            isValid = object.equals( object.toUpperCase() );
+        if(enumValues != null)
+        {
+            for(Object enumValue:enumValues)
+            {
+                if(object.equals(enumValue.toString()))
+                {
+                    result = true; 
+                    break;
+                }
+            }
         }
-        else {
-            isValid = object.equals( object.toLowerCase() );
-        }
-
-        if ( !isValid ) {
-            constraintContext.disableDefaultConstraintViolation();
-            constraintContext.buildConstraintViolationWithTemplate(
-                    "{org.hibernate.validator.referenceguide.chapter06." +
-                    "constraintvalidatorcontext.CheckCase.message}"
-            )
-            .addConstraintViolation();
-        }
-
-        return isValid;
+         
+        return result;
     }
 }
