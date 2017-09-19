@@ -1,0 +1,16 @@
+
+# JACKSON
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+
+jwt:
+  header: Authorization
+  secret: mySecret
+  expiration: 386500 
+
+logging:
+  level:
+    org.springframework:
+      security: DEBUG
