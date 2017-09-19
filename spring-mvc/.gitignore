@@ -24,4 +24,4 @@ nbdist/
 .nb-gradle/
 
 out
-ProductApplicationDI.iml
+spring-mvc.iml
