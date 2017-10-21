@@ -1,0 +1,31 @@
+Configuration:
+  status: info
+
+  Appenders:
+    Console:
+      - name: Console
+        target: SYSTEM_OUT
+        PatternLayout:
+          Pattern: "%d{HH:mm:ss.SSS} %-5level %logger{1} - %msg%n"
+    File:
+      - name: File
+        fileName: /dev/logs/logfile.log
+        PatternLayout:
+          Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: Console
+        
+    # begin Application Logging
+    Logger:
+      - name: com.eprogrammerz.examples
+        level: trace
+        additivity: false
+        AppenderRef:
+          - ref: Console
+            level: trace
+          - ref: File
+            level: trace
