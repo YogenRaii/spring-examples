@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface DerivedRepository extends MongoRepository<Derived, String> {
     List<Derived> findByFieldA(String fieldA);
+    List<Derived> findByFieldB(String fieldB);
 }
