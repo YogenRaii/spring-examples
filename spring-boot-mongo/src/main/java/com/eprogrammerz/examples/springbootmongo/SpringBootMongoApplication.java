@@ -20,7 +20,6 @@ public class SpringBootMongoApplication implements CommandLineRunner {
 		SpringApplication.run(SpringBootMongoApplication.class, args);
 	}
 
-
 	@Override
 	public void run(String... strings) throws Exception {
 		System.out.println("logging app...");
