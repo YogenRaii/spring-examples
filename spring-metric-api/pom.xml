@@ -24,7 +24,7 @@
 		<java.version>1.8</java.version>
 
 		<!--  This format is used by SonarQube. If you need another format see "buildnumber-maven-plugin" -->
-		<maven.build.timestamp.format>MM.yyyy</maven.build.timestamp.format>
+		<maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
 		<yearMonth>${maven.build.timestamp}</yearMonth>
 		<!-- ************************-->
 		<!-- Sonar/Reporting settings -->
@@ -116,82 +116,118 @@
 	</dependencies>
 
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>@{jacoco.agent.ut.arg}</argLine>
-					<!-- Specific to generate mapping between tests and covered code -->
-					<properties>
-						<property>
-							<name>listener</name>
-							<value>org.sonar.java.jacoco.JUnitListener</value>
-						</property>
-					</properties>
-					<!-- test failure ignore -->
-					<testFailureIgnore>true</testFailureIgnore>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<configuration>
-					<argLine>-Xmx1024m -XX:MaxPermSize=256m @{jacoco.agent.it.arg}</argLine>
-					<!-- Specific to generate mapping between tests and covered code -->
-					<properties>
-						<property>
-							<name>listener</name>
-							<value>org.sonar.java.jacoco.JUnitListener</value>
-						</property>
-					</properties>
-					<!-- Let's put failsafe reports with surefire to have access to tests
-                        failures/success reports in sonar -->
-					<reportsDirectory>${project.build.directory}/surefire-reports
-					</reportsDirectory>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
-				<executions>
-					<!-- Prepares a variable, jacoco.agent.ut.arg, that contains the info
-                        to be passed to the JVM hosting the code being tested. -->
-					<execution>
-						<id>prepare-ut-agent</id>
-						<phase>process-test-classes</phase>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-						<configuration>
-							<destFile>${sonar.jacoco.reportPath}</destFile>
-							<propertyName>jacoco.agent.ut.arg</propertyName>
-							<append>true</append>
-						</configuration>
-					</execution>
-					<!-- Prepares a variable, jacoco.agent.it.arg, that contains the info
-                        to be passed to the JVM hosting the code being tested. -->
-					<execution>
-						<id>prepare-it-agent</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-						<configuration>
-							<destFile>${sonar.jacoco.itReportPath}</destFile>
-							<propertyName>jacoco.agent.it.arg</propertyName>
-							<append>true</append>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+	<plugins>
+	<plugin>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-maven-plugin</artifactId>
+	</plugin>
+	</plugins></build>
 
+	<profiles>
+		<profile>
+			<id>coverage</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<argLine>@{jacoco.agent.ut.arg}</argLine>
+							<!-- Specific to generate mapping between tests and covered code -->
+							<properties>
+								<property>
+									<name>listener</name>
+									<value>org.sonar.java.jacoco.JUnitListener</value>
+								</property>
+							</properties>
+							<!-- test failure ignore -->
+							<testFailureIgnore>true</testFailureIgnore>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<configuration>
+							<argLine>-Xmx1024m -XX:MaxPermSize=256m @{jacoco.agent.it.arg}</argLine>
+							<!-- Specific to generate mapping between tests and covered code -->
+							<properties>
+								<property>
+									<name>listener</name>
+									<value>org.sonar.java.jacoco.JUnitListener</value>
+								</property>
+							</properties>
+							<!-- Let's put failsafe reports with surefire to have access to tests
+                                failures/success reports in sonar -->
+							<reportsDirectory>${project.build.directory}/surefire-reports
+							</reportsDirectory>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>${jacoco.version}</version>
+						<executions>
+							<!-- Prepares a variable, jacoco.agent.ut.arg, that contains the info
+                                to be passed to the JVM hosting the code being tested. -->
+							<execution>
+								<id>prepare-ut-agent</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+								<configuration>
+									<destFile>${sonar.jacoco.reportPath}</destFile>
+									<propertyName>jacoco.agent.ut.arg</propertyName>
+									<append>true</append>
+								</configuration>
+							</execution>
+							<!-- Prepares a variable, jacoco.agent.it.arg, that contains the info
+                                to be passed to the JVM hosting the code being tested. -->
+							<execution>
+								<id>prepare-it-agent</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+								<configuration>
+									<destFile>${sonar.jacoco.itReportPath}</destFile>
+									<propertyName>jacoco.agent.it.arg</propertyName>
+									<append>true</append>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- Integraton tests -->
+		<profile>
+			<id>run-its</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>integration-test</id>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>integration-test</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>verify</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.eprogrammerz.examples</groupId>
-	<artifactId>custom-bean-validation</artifactId>
+	<artifactId>spring-custom-bean-validation</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>custom-bean-validation</name>
+	<name>spring-custom-bean-validation</name>
 	<description>Custom Bean validation with Enum</description>
 
 	<parent>

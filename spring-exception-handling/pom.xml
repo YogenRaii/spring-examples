@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.eprogrammerz.examples</groupId>
-	<artifactId>rest-bean-validation</artifactId>
+	<artifactId>spring-exception-handling</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>rest-bean-validation</name>
-	<description>Bean Validation in RESTful API</description>
+	<name>spring-exception-handling</name>
+	<description>Exception Handling in RESTful API</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
