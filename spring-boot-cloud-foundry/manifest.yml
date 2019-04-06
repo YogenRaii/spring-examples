@@ -1,0 +1,11 @@
+---
+applications:
+  - name: spring-cf
+    memory: 1024M
+    instances: 1
+    random-route: false
+    path: target/spring-boot-cloud-foundry-0.0.1-SNAPSHOT.jar
+    buildpacks:
+      - https://github.com/cloudfoundry/java-buildpack.git
+    services:
+      - mysql

@@ -1,0 +1,15 @@
+server:
+  port: ${BOOKMARK_SVC_PORT:9098}
+
+spring:
+  jpa:
+    generate-ddl: true
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bookmark
+    username: root
+    password:
+
+---
+spring:
+  profiles: cloud
