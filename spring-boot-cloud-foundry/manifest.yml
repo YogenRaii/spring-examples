@@ -1,3 +1,26 @@
+#helpful commands
+#cf marketplace
+#cleardb          spark, boost*, amp*, shock*
+#
+#cf create-service cleardb spark MY-DB
+#now, update mainfest.yml with new service
+#
+#cf push YOUR-HOST-APP
+#cf enable-ssh YOUR-HOST-APP
+#
+#ssh to your app
+#cf ssh YOUR-HOST-APP
+#
+#ssh to your service
+#1. generate key
+#cf create-service-key MY-DB EXTERNAL-ACCESS-KEY
+#2. copy key
+#cf service-key MY-DB EXTERNAL-ACCESS-KEY
+#3 (a) ssh tunnel
+#cf ssh -L 63306:us-cdbr-iron-east-01.cleardb.net:3306 YOUR-HOST-APP
+#3 (b) direct connect
+#mysql -u b5136e448be920 -h 0 -p -D ad_b2fca6t49704585d -P 63306
+
 ---
 applications:
   - name: spring-cf
