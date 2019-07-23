@@ -1,29 +1,53 @@
 package com.eprogrammerz.examples.spring.springtrasaction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+
+import java.util.List;
 
 @Component
 public class AppRunner implements CommandLineRunner {
-    @Autowired
-    private ApplicationContext appContext;
+    private static final Logger log = LoggerFactory.getLogger(AppRunner.class);
 
     @Autowired
-    private TaskExecutor taskExecutor;
+    private BookingService bookingService;
 
     @Override
     public void run(String... args) throws Exception {
-        Runnable t1 = this.appContext.getBean(SpringTxThread.class);
-        taskExecutor.execute(t1);
+        bookingService.book("yogen", "pratima", "esma");
 
-        Runnable t2 = this.appContext.getBean(SpringTxThread.class);
-        taskExecutor.execute(t2);
+        List<String> bookings = bookingService.findAllBookings().get();
+        Assert.isTrue(bookings.size() == 3, "Booking should be for 3");
 
-        Runnable t3 = this.appContext.getBean(SpringTxThread.class);
-        taskExecutor.execute(t3);
+        log.info("Bookings: {}", bookings);
+
+        try {
+            bookingService.book("sabina", "prateema", "yogs");
+        } catch (RuntimeException e) {
+            log.info(" --- this is because 'prateema' violates constraints ----");
+            log.error(e.getMessage());
+        }
+
+        bookings = bookingService.findAllBookings().get();
+        Assert.isTrue(bookings.size() == 3, "Still booking should be for 3");
+
+        log.info("Bookings: {}", bookings);
+
+        try {
+            bookingService.book("sabina", null, "yogs");
+        } catch (RuntimeException e) {
+            log.info(" --- this is because 'null' violates constraints ----");
+            log.error(e.getMessage());
+        }
+        bookings = bookingService.findAllBookings().get();
+        Assert.isTrue(bookings.size() == 3, "Still booking should be for 3");
+
+        log.info("Bookings: {}", bookings);
+
+
     }
 }
