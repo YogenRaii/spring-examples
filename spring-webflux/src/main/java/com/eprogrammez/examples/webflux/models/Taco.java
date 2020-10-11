@@ -1,25 +1,27 @@
 package com.eprogrammez.examples.webflux.models;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.Field;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
+import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Entity
+@Document
 public class Taco {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationStrategy.USE_ATTRIBUTES)
+    private String id;
+    @Field @IdAttribute
     private String name;
-    private LocalDateTime createdAt;
+    @Field @IdAttribute
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @ManyToMany(targetEntity = Ingredient.class)
+    @Field
     private List<Ingredient> ingredients;
-
-    @PrePersist
-    void createdAt() {
-        this.createdAt = LocalDateTime.now();
-    }
 }

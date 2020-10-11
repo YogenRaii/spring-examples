@@ -21,7 +21,7 @@ public class TacoController {
     }
 
     @GetMapping("/{id}")
-    public Mono<Taco> tacoById(@PathVariable long id) {
+    public Mono<Taco> tacoById(@PathVariable String id) {
         return tacoRepository.findById(id);
     }
 

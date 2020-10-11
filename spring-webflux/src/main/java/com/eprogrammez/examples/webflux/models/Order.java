@@ -1,31 +1,31 @@
 package com.eprogrammez.examples.webflux.models;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.Field;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
+import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Entity
-@Table(name = "Taco_Order")
+@Document
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationStrategy.USE_ATTRIBUTES)
+    private String id;
 
-    private LocalDateTime createdAt;
+    @Field
+    @IdAttribute
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @ManyToMany(targetEntity = Taco.class)
     private List<Taco> tacos = new ArrayList<>();
 
     public void addDesign(Taco design) {
         this.tacos.add(design);
-    }
-
-    @PrePersist
-    void createdAt() {
-        this.createdAt = LocalDateTime.now();
     }
 }

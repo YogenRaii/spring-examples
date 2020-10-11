@@ -29,12 +29,13 @@ class TacoControllerTest {
 
     @Test
     void tacoById() {
-        Taco taco = createTaco(1L);
-        when(tacoRepository.findById(1L)).thenReturn(Mono.just(taco));
+        String tacoId = UUID.randomUUID().toString();
+        Taco taco = createTaco(tacoId);
+        when(tacoRepository.findById(tacoId)).thenReturn(Mono.just(taco));
 
         WebTestClient client = WebTestClient.bindToController(new TacoController(tacoRepository)).build();
 
-        client.get().uri("/tacos/1").accept(MediaType.APPLICATION_JSON)
+        client.get().uri("/tacos/{id}", tacoId).accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Taco.class)
@@ -43,7 +44,8 @@ class TacoControllerTest {
 
     @Test
     void createTaco() {
-        Taco savedTaco = createTaco(1L);
+        String tacoId = UUID.randomUUID().toString();
+        Taco savedTaco = createTaco(tacoId);
         when(tacoRepository.saveAll(any(Mono.class))).thenReturn(Flux.just(savedTaco));
 
         WebTestClient client = WebTestClient.bindToController(new TacoController(tacoRepository)).build();
@@ -55,7 +57,7 @@ class TacoControllerTest {
                 .isEqualTo(savedTaco);
     }
 
-    private Taco createTaco(Long id) {
+    private Taco createTaco(String id) {
         Taco taco = new Taco();
         taco.setId(id);
         taco.setCreatedAt(LocalDateTime.now());
