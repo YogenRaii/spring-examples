@@ -61,6 +61,8 @@ public class ReactorTests {
                                     String[] name = p.split(" ");
                                     return new Player(name[0], name[1]);
                                 })
+                                // subscribeOn() indicates each subscription should take place in parallel
+                                // in threads equal to the number of CPU cores
                                 .subscribeOn(Schedulers.parallel())
                 );
 
